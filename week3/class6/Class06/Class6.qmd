@@ -1,0 +1,116 @@
+---
+title: "Class06"
+author: "Jie"
+format: html
+date: 2022-10-14
+toc: true
+---
+
+```{r}
+df_grade <- read.csv("~/Desktop/BGGN 213/week3/student_homework.csv", row.names = 1)
+df_grade
+```
+
+```{r}
+df_grade[is.na((df_grade))] <- 0
+df_grade
+```
+
+## Barry's demo
+
+```{r}
+#grade <- function(x){
+#x [is.na(x)] <- 0
+#mean( x[-whcih.min(x)] )
+```
+
+```{r}
+#gradebook <- read.csv("~/Desktop/BGGN 213/week3/student_homework.csv",row.names = 1)
+#head(gradebook)
+
+```
+
+'apply()' function
+apply(X, MARGIN, FUN, ..., simplify = TRUE)
+
+```{r}
+#results <- apply(gradebook,1,grade)
+#results
+```
+
+```{r}
+#which.max(results)
+```
+
+
+## Question 1
+
+```{r}
+df_grade["student-1",]
+```
+
+```{r}
+s1 <- df_grade["student-1",]
+s1
+```
+```{r}
+df_grade[1,]
+```
+
+```{r}
+vec = c()
+grade <- function(df_grade) {
+  for (i in 1:nrow(df_grade)){
+    s <- df_grade[i,]
+    average <- (rowSums(s) - min(s))/4
+    
+  vec = c(vec,average)
+  }
+    return(vec)
+}
+```
+
+```{r}
+average_grade <- grade(df_grade)
+average_grade
+#class(average_grade)
+```
+
+## Question 2
+
+```{r}
+which.max(average_grade)
+```
+
+## Question 3
+
+```{r}
+mean_hw <- c(mean(df_grade$hw1),mean(df_grade$hw2),mean(df_grade$hw3),mean(df_grade$hw4),mean(df_grade$hw5))
+mean_hw
+which.min(mean_hw)
+```
+Homework 2 is the hardest 
+
+## Question 3 - sum
+```{r}
+sum_hw <- c(sum(df_grade$hw1),sum(df_grade$hw2),sum(df_grade$hw3),sum(df_grade$hw4),sum(df_grade$hw5))
+sum_hw
+which.min(sum_hw)
+```
+```{r}
+hw <- apply(df_grade,2,sum,na.rm=TRUE)
+hw
+```
+
+## Question 4
+
+```{r}
+cor_5 <- cor(df_grade$hw5,average_grade)
+cor_5
+apply(df_grade,2,cor,y=average_grade)
+```
+
+
+
+
+

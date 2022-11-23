@@ -1,0 +1,77 @@
+---
+title: "HW6"
+output: pdf_document
+date: "2022-10-16"
+---
+
+```{r}
+library(bio3d)
+s1 <- read.pdb("4AKE")  # kinase with drug
+s2 <- read.pdb("1AKE")  # kinase no drug
+s3 <- read.pdb("1E4Y")  # kinase with drug
+s1.chainA <- trim.pdb(s1, chain="A", elety="CA")
+s2.chainA <- trim.pdb(s2, chain="A", elety="CA")
+s3.chainA <- trim.pdb(s3, chain="A", elety="CA")
+s1.b <- s1.chainA$atom$b
+s2.b <- s2.chainA$atom$b
+s3.b <- s3.chainA$atom$b
+plotb3(s1.b, sse=s1.chainA, typ="l", ylab="Bfactor")
+plotb3(s2.b, sse=s2.chainA, typ="l", ylab="Bfactor")
+plotb3(s3.b, sse=s3.chainA, typ="l", ylab="Bfactor")
+```
+
+Q1. What type of object is returned from the read.pdb() function?
+
+```{r}
+class(s1)
+```
+
+**PDB structure object**
+
+Q2. What does the trim.pdb() function do?
+
+**It reduces pdb to a smaller pdb object that only contains a subset of chain and type**
+
+Q3. What input parameter would turn off the marginal black and grey rectangles in the plots and what do they represent in this case?
+
+**sse parameter would turn off the rectangles and they represent secondary structure elements(black: alpha helices; light grey: beta sheets)**
+
+Q4. What would be a better plot to compare across the different proteins?
+
+**Plots that can show sequence and structural conservation, for example structural superposition diagram or alignment graphs**
+
+Q5. Which proteins are more similar to each other in their B-factor trends. How could you quantify this?
+
+```{r}
+hc <- hclust( dist( rbind(s1.b, s2.b, s3.b) ) )
+plot(hc)
+```
+
+**s2 and s3 are more similar, height is used to quantify them also the joint between s2 and s3 show that they are more closely related**
+
+## Write a function
+
+Q6. How would you generalize the original code above to work with any set of input protein structures?
+
+```{r}
+
+pdbanalysis <- function(x){
+    s <- read.pdb(x) 
+    s.chainA <- trim.pdb(s, chain="A", elety="CA")
+    s.b <- s.chainA$atom$b
+    plotb3(s.b, sse=s.chainA, typ="l", ylab="Bfactor")
+    return(s.b)
+    
+  }
+```
+
+1.  Input of the function is the pdb structure object(pdb file)
+2.  The function is to read the pdb file, reduce it to a specified and desired chain to analyze a given kinase
+3.  The output is a plot of residues vs B-factor with noted secondary structure elements
+
+```{r}
+#Example output
+pdbanalysis ("4AKE")
+pdbanalysis ("1AKE")
+pdbanalysis ("1E4Y")
+```
