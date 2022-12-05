@@ -1,0 +1,70 @@
+---
+title: "FindAGene"
+format: html
+---
+
+```{r}
+library(bio3d)
+```
+
+```{r}
+aligned_sequences <- read.fasta("~/Desktop/BGGN 213/muscle.fst")
+aligned_sequences
+```
+```{r}
+aln.seq <- seqidentity(aligned_sequences)
+```
+
+```{r}
+library(pheatmap)
+```
+
+```{r}
+pheatmap(aln.seq)
+```
+
+```{r}
+library(bio3d)
+```
+
+
+```{r}
+#seq <- consensus(aligned_sequences, cutoff = 0.6)
+#seq
+```
+
+```{r}
+#seq <- "MAkSsxSxglmSxvxxxxkexNavxxkexfsgxVxexxxvxmtSxxLxnxxqipveaxxx
+vxxgxxIxYllmvIgxavxLaxVxrfxxLxxknggGxfxVxILxfMVxfgyxVxymeLxl
+xfFxxxxxagxwkxcxxlkgxxftlilxSlyvxfxxxVIIxxAlxxxfsxxttexxxxxx
+xnswxipnxsxahxxxsxgxaxglmdxfxTxvaxxyfxxgvlxlxxsxxVdxxxxxxxxx
+txxLVLviVlxyxxxxxgVKTAxaVvWxxvtmPxVvLxallxxxvtlxxxixxixaylsx
+dxyxlxxxsxxIxaaxxxxxsxxVxxxVLiaxSxyxxxxNxxxxxxIxTtxxnslTxisx
+gxIxxxxxxxmyxxxsvxxxxxxkxxxxLxxixxxxxxxtxxxsxxxxvxfxiMlxxxxi
+xsxmGxxexvxxglxdxxqLlxxxxxfxtlxxvlxxxLxxxfcxxxgxxyxxxlxxhxax
+xtxilxxxxxxaxxxxxfyxxxxxxddxqxMxxqxxxxyxxxxxxlxsxxxlxxvvvxsI
+xxfrxxhxxxxxxxxxxxxxxxvxxTxxmxmvxixxxxxxxsxxxxxrxxxxxxxxxexx
+rxlvxxxxxxxxxlxxxlxxxxxxxxxxxxxxxxxxxxxxxxxx"
+```
+
+```{r}
+blast <- blast.pdb(seq, database = "pdb", time.out = NULL, chain.single=TRUE)
+
+head(blast$hit.tbl)
+top.hits <- plot(blast)
+head(top.hits$hits)
+
+## Use 'get.blast()' to retrieve results at a later time.
+#x <- get.blast(blast$url)
+#head(x$hit.tbl)
+
+# Examine and download 'best' hits
+top.hits <- plot.blast(blast)
+head(top.hits$hits)
+```
+```{r}
+ids <- c("4XPB_A","4XP4_A","4M48_A")
+anno <- pdb.annotate(ids)
+anno
+```
+

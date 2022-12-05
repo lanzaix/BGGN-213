@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>FindAGene</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="findagene_files/libs/clipboard/clipboard.min.js"></script>
+<script src="findagene_files/libs/quarto-html/quarto.js"></script>
+<script src="findagene_files/libs/quarto-html/popper.min.js"></script>
+<script src="findagene_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="findagene_files/libs/quarto-html/anchor.min.js"></script>
+<link href="findagene_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="findagene_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="findagene_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="findagene_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="findagene_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">FindAGene</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bio3d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>aligned_sequences <span class="ot">&lt;-</span> <span class="fu">read.fasta</span>(<span class="st">"~/Desktop/BGGN 213/muscle.fst"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>aligned_sequences</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                       1        .         .         .         .         50 
+Vibrio_cholerae        MAQSN---------------------------------------------
+Notamacropus_eugenii   --------------------------------------------------
+Homo_sapien            MSKSKCSVGLMSSVVAPAKEPNAVGPKEVELILVKEQNGVQLTSSTLTNP
+Pan_paniscus           MSKSKCSVGLMSSVVAPAKEPNAVGPKEVELILVKEQNGVQLTSSTLTNP
+Bombyx_mori            -------MALKTPTP------GVVG-------------------------
+Drosophila             MSPTGHISKSKTPTPHDNDNNSISD-------------------------
+                                                                          
+                       1        .         .         .         .         50 
+
+                      51        .         .         .         .         100 
+Vibrio_cholerae        --------SRETFSSRLGFILAAAGAAVGLGNIWGFPTQAASNGGGAFLL
+Notamacropus_eugenii   --------------------------------------------------
+Homo_sapien            RQSPVEAQDRETWGKKIDFLLSVIGFAVDLANVWRFPYLCYKNGGGAFLV
+Pan_paniscus           RQSPVEAQDRETWGKKIDFLLSVIGFAVDLANVWRFPYLCYKNGGGAFLV
+Bombyx_mori            --------ERETWGKKVDFLLSVIGFAVDLANVWRFPYLCYKNGGGAFLV
+Drosophila             --------ERETWSGKVDFLLSVIGFAVDLANVWRFPYLCYKNGGGAFLV
+                                                                          
+                      51        .         .         .         .         100 
+
+                     101        .         .         .         .         150 
+Vibrio_cholerae        VYLILIFVVAFPMLVVEMAIGRYGQANPVDSMRSLTSQPAAKKVGGFVGW
+Notamacropus_eugenii   --------------------------------------------------
+Homo_sapien            PYLLFMVIAGMPLFYMELALGQFNREGAAGVW-KIC--PILKGVGFTVIL
+Pan_paniscus           PYLLFMVIAGMPLFYMELALGQFNREGAAGVW-KIC--PILKGVGFTVIL
+Bombyx_mori            PYCIMLVVGGIPLFYMELALGQFHRKGAITCWGRLV--PLFKGIGYAVVL
+Drosophila             PYGIMLVVGGIPLFYMELALGQHNRKGAITCWGRLV--PLFKGIGYAVVL
+                                                                          
+                     101        .         .         .         .         150 
+
+                     151        .         .         .         .         200 
+Vibrio_cholerae        VGLSVPSAVLAFYSIVGGWIICFLLGAMTDLFGFTA--------------
+Notamacropus_eugenii   --------------------------------------------------
+Homo_sapien            ISLYVGF----FYNVIIAWALHYLFSSFTTELPWIHCNNSWNSPNC----
+Pan_paniscus           ISLYVGF----FYNVIIAWALHYLFSSFTTELPWIHCNNSWNSPNC----
+Bombyx_mori            IAFYVDF----YYNVIIAWALRFFFASFTTMLPWTNCDNEWNTPACRPFE
+Drosophila             IAFYVDF----YYNVIIAWSLRFFFASFTNSLPWTSCNNIWNTPNCRPFE
+                                                                          
+                     151        .         .         .         .         200 
+
+                     201        .         .         .         .         250 
+Vibrio_cholerae        --------------------------ASAWLKGFSVERNLFGT-------
+Notamacropus_eugenii   --------------------------------------------------
+Homo_sapien            --------------------------SDAHPGDSSGDSSGLNDTFG-TTP
+Pan_paniscus           --------------------------SDAHPGDSSGDSSGLNDTFG-TTP
+Bombyx_mori            A--------------IWDV-------NRTRIRNTTSASLGIAPTTPYTSA
+Drosophila             SQNASRVPVIGNYSDLYAMGNQSLLYNETYMNGSSLDTSAVGHVEGFQSA
+                                                                          
+                     201        .         .         .         .         250 
+
+                     251        .         .         .         .         300 
+Vibrio_cholerae        ---------------------------------LIFYVLTILIVQGGVKQ
+Notamacropus_eugenii   --------------------------------------------------
+Homo_sapien            AAEYFERGVLHLHQSHGIDDLGPPRWQLTACLVLVIVLLYFSLWKGVKTS
+Pan_paniscus           AAEYFERGVLHLHQSHGIDDLGPPRWQLTACLVLVIVLLYFSLWKGVKTS
+Bombyx_mori            ASEYFNRAILELQGSEGLHDLGSVKWDMALCLLAVYVICYFSLWKGISTS
+Drosophila             ASEYFNRYILELNRSEGIHDLGAIKWDMALCLLIVYLICYFSLWKGISTS
+                                                                          
+                     251        .         .         .         .         300 
+
+                     301        .         .         .         .         350 
+Vibrio_cholerae        GIERWSTRLMPALFVLFAVLFIYIMTQQGAWEGLKHYLIPDFEKVWDRKL
+Notamacropus_eugenii   --------------------------------------------------
+Homo_sapien            GKVVWITATMP--YVVLTALLLRGVTLPGAIDGIRAYLSVDFYRLCEASV
+Pan_paniscus           GKVVWITATMP--YVVLTALLLRGVTLPGAIDGIRAYLSVDFYRLCEASV
+Bombyx_mori            GKVVWFTALFP--YAVLLILLVRGITLPGSATGIQYYLSPNFEAITQPQV
+Drosophila             GKVVWFTALFP--YAVLLILLIRGLTLPGSFLGIQYYLTPNFSAIYKAEV
+                                                                          
+                     301        .         .         .         .         350 
+
+                     351        .         .         .         .         400 
+Vibrio_cholerae        ILAAMGQGFFSLTIGGCSMLIYGSYLSKKENLPKMAMSVTLVDTAVAFIA
+Notamacropus_eugenii   -------------------IAFSSYNKFTNNCYRDAIITTSVNSLTSFFS
+Homo_sapien            WIDAATQVCFSLGVGFGVLIAFSSYNKFTNNCYRDAIVTTSINSLTSFSS
+Pan_paniscus           WIDAATQVCFSLGVGFGVLIAFSSYNKFTNNCYRDAIVTTSINSLTSFSS
+Bombyx_mori            WVDAATQVFFSLGPGFGVLLAYASYNKYHNNVYKDAILTSVINSATSFVA
+Drosophila             WVDAATQVFFSLGPGFGVLLAYASYNKYHNNVYKDALLTSFINSATSFIA
+                                          ^ ^ **     *  ^ *^  ^ ^ ^   *   
+                     351        .         .         .         .         400 
+
+                     401        .         .         .         .         450 
+Vibrio_cholerae        GLVVLPAM-FVAMNKGVQI--YAQDGSLLSSDTLVFTVLPLMFDSLGLLG
+Notamacropus_eugenii   GFVIFSFLGYMSQEHNVPIGDVAKDGP-----GLIFIIYPEAIATLP-LS
+Homo_sapien            GFVVFSFLGYMAQKHSVPIGDVAKDGP-----GLIFIIYPEAIATLP-LS
+Pan_paniscus           GFVVFSFLGYMAQKHSVPIGDVAKDGP-----GLIFIIYPEAIATLP-LS
+Bombyx_mori            GFVIFSVLGYMAHASGRDVQDVATEGP-----GLVFVVYPAAIATMP-GS
+Drosophila             GFVIFSVLGYMAHTLGVRIEDVATEGP-----GLVFVVYPAAIATMP-AS
+                       * *^   ^ ^^       ^   * ^*       *^* ^ *    ^^     
+                     401        .         .         .         .         450 
+
+                     451        .         .         .         .         500 
+Vibrio_cholerae        QIFAMVFFLLLTIAALTSSISMLECPVALVGERFNTRRTPTSWVLGGLIA
+Notamacropus_eugenii   SAWAVVFFIMLLTLGIDSAMGGMESVITGLIDEFKFLHRHRELFTLFIVL
+Homo_sapien            SAWAVVFFIMLLTLGIDSAMGGMESVITGLIDEFQLLHRHRELFTLFIVL
+Pan_paniscus           SAWAVVFFIMLLTLGIDSAMGGMESVITGLIDEFQLLHRHRELFTLFIVL
+Bombyx_mori            TFWALIFFMMLLTLGLDSSFGGSEAIITALSDEFPPIGRHRELFVACLFT
+Drosophila             TFWALIFFMMLLTLGLDSSFGGSEAIITALSDEFPKIKRNRELFVAGLFS
+                         ^*^^**^^*   ^^ *     *  ^  ^ ^ *             ^   
+                     451        .         .         .         .         500 
+
+                     501        .         .         .         .         550 
+Vibrio_cholerae        LFSVVIVYNF--GALFGLVATLATQYLQPTAALMFCLFGG----WVWQRD
+Notamacropus_eugenii   STFLTSLFCVTNGGIY--VFTLLDHFAAGTSILFGVLIEAIGVAWFYGVG
+Homo_sapien            ATFLLSLFCVTNGGIY--VFTLLDHFAAGTSILFGVLIEAIGVAWFYGVG
+Pan_paniscus           ATFLLSLFCVTNGGIY--VFTLLDHFAAGTSILFGVLIEAIGVAWFYGVG
+Bombyx_mori            LYFFVGLASCTKGGFY--FFQLLDRYAAGYSILIAVFFEAIAVSWIYGTE
+Drosophila             LYFVVGLASCTQGGFY--FFHLLDRYAAGYSILVAVFFEAIAVSWIYGTN
+                             ^     *^ ^     *   ^      *      ^    * ^    
+                     501        .         .         .         .         550 
+
+                     551        .         .         .         .         600 
+Vibrio_cholerae        AKMKELQ--AGFPELQQSLFGKIWPWYVKFVCPVLVATVI----------
+Notamacropus_eugenii   QFSDDIKQMIGRRP------GLYWRLCWKFVSPCFLLFVVVVSIVTFRPP
+Homo_sapien            QFSDDIQQMTGQRP------SLYWRLCWKLVSPCFLLFVVVVSIVTFRPP
+Pan_paniscus           QFSDDIQQMTGQRP------SLYWRLCWKLVSPCFLLFVVVVSIVTFRPP
+Bombyx_mori            RFCEDIRDMIGFRP------GLYWRVCWRFAAPSFLLFITAYGLLDYEPL
+Drosophila             RFSEDIRDMIGFPP------GRYWQVCWRFVAPIFLLFITVYGLIGYEPL
+                           ^^    *            *    ^   *  ^  ^            
+                     551        .         .         .         .         600 
+
+                     601        .         .         .         .         650 
+Vibrio_cholerae        ---------WASF-------------------------------------
+Notamacropus_eugenii   NYGTYIFPDWANVVGWIIATSSM-MVPIYATYKFCSLPGSFRKKLAYAIT
+Homo_sapien            HYGAYIFPDWANALGWVIATXSMAMVPIYAAYKFCSLPGSFREKLAYAIA
+Pan_paniscus           HYGAYIFPDWANALGWVIATSSMAMVPIYAAYKFCSLRGSFREKLAYAIA
+Bombyx_mori            QYENYIYPGWANALGWAIAGSSVMCIPTVAIYKLITTKGSFLERLRVLTT
+Drosophila             TYADYVYPSWANALGWCIAGSSVVMIPAVAIFKLLSTPGSLRQRFTILTT
+                                **                                        
+                     601        .         .         .         .         650 
+
+                     651        .         .         .         .         700 
+Vibrio_cholerae        -------------G------------------------------------
+Notamacropus_eugenii   PEKEH---GLVENG------------------EVRQFTLRHWLM------
+Homo_sapien            PEKDR---ELVDRG------------------EVRQFTLRHWLK------
+Pan_paniscus           PEKDR---ELVDRG------------------EVRQFTLRHWLK------
+Bombyx_mori            PYADSERNGTVHNGMIVSESGGVRLTSAVQTPTTPQQPIGANIPAASAPT
+Drosophila             PWRDQQSMAMVLNG-VTTEVTVVRLTDT----ETAKEPVDVXVR----PV
+                                    *                                     
+                     651        .         .         .         .         700 
+
+                     701      708 
+Vibrio_cholerae        --------
+Notamacropus_eugenii   -------V
+Homo_sapien            -------V
+Pan_paniscus           -------V
+Bombyx_mori            LASSPALV
+Drosophila             ARFQIYYV
+                                
+                     701      708 
+
+Call:
+  read.fasta(file = "~/Desktop/BGGN 213/muscle.fst")
+
+Class:
+  fasta
+
+Alignment dimensions:
+  6 sequence rows; 708 position columns (201 non-gap, 507 gap) 
+
++ attr: id, ali, call</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>aln.seq <span class="ot">&lt;-</span> <span class="fu">seqidentity</span>(aligned_sequences)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pheatmap)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pheatmap</span>(aln.seq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="findagene_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bio3d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#seq &lt;- consensus(aligned_sequences, cutoff = 0.6)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#seq</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>seq <span class="ot">&lt;-</span> <span class="st">"IAFSSYNKFTNNCYRDAIITTSVNSLTSFFSGFVIFSFLGYMSQEHNVPIGDVAKDGPGLIFIIYPEAIATLPLSSAWAVVFFIMLLTLGIDSAMGGMESVITGLIDEFKFLHRHRELFTLFIVLSTFLTSLFCVTNGGIYVFTLLDHFAAGTSILFGVLIEAIGVAWFYGVGQFSDDIKQMIGRRPGLYWRLCWKFVSPCFLLFVVVVSIVTFRPPNYGTYIFPDWANVVGWIIATSSMMVPIYATYKFCSLPGSFRKKLAYAITPEKEHGLVENGEVRQFTLRHWLMV"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>blast <span class="ot">&lt;-</span> <span class="fu">blast.pdb</span>(seq, <span class="at">database =</span> <span class="st">"pdb"</span>, <span class="at">time.out =</span> <span class="cn">NULL</span>, <span class="at">chain.single=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Searching ... please wait (updates every 5 seconds) RID = SGFXB4W6013 
+ ......
+ Reporting 42 hits</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(blast<span class="sc">$</span>hit.tbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      queryid subjectids identity alignmentlength mismatches gapopens q.start
+1 Query_29853     4XPB_A   51.273             275        133        1       1
+2 Query_29853     4XPG_A   51.273             275        133        1       1
+3 Query_29853     4XP4_A   50.909             275        134        1       1
+4 Query_29853     4XPH_A   51.292             271        131        1       1
+5 Query_29853     4XPT_A   51.292             271        131        1       1
+6 Query_29853     4M48_A   50.909             275        134        1       1
+  q.end s.start s.end   evalue bitscore positives mlog.evalue pdb.id    acc
+1   274     267   541 8.11e-97      296     69.82    221.2577 4XPB_A 4XPB_A
+2   274     267   541 1.39e-96      295     69.82    220.7189 4XPG_A 4XPG_A
+3   274     269   543 8.15e-96      293     69.45    218.9502 4XP4_A 4XP4_A
+4   270     264   534 9.13e-96      293     70.11    218.8366 4XPH_A 4XPH_A
+5   270     265   535 9.28e-96      293     70.11    218.8203 4XPT_A 4XPT_A
+6   274     267   541 1.19e-95      293     69.45    218.5716 4M48_A 4M48_A</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>top.hits <span class="ot">&lt;-</span> <span class="fu">plot</span>(blast)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  * Possible cutoff values:    185 81 -3 
+            Yielding Nhits:    26 29 42 
+
+  * Chosen cutoff value of:    81 
+            Yielding Nhits:    29 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(top.hits<span class="sc">$</span>hits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  pdb.id   acc      group
+1 "4XPB_A" "4XPB_A" "1"  
+2 "4XPG_A" "4XPG_A" "1"  
+3 "4XP4_A" "4XP4_A" "1"  
+4 "4XPH_A" "4XPH_A" "1"  
+5 "4XPT_A" "4XPT_A" "1"  
+6 "4M48_A" "4M48_A" "1"  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Use 'get.blast()' to retrieve results at a later time.</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">#x &lt;- get.blast(blast$url)</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">#head(x$hit.tbl)</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine and download 'best' hits</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>top.hits <span class="ot">&lt;-</span> <span class="fu">plot.blast</span>(blast)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  * Possible cutoff values:    185 81 -3 
+            Yielding Nhits:    26 29 42 
+
+  * Chosen cutoff value of:    81 
+            Yielding Nhits:    29 </code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="findagene_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(top.hits<span class="sc">$</span>hits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  pdb.id   acc      group
+1 "4XPB_A" "4XPB_A" "1"  
+2 "4XPG_A" "4XPG_A" "1"  
+3 "4XP4_A" "4XP4_A" "1"  
+4 "4XPH_A" "4XPH_A" "1"  
+5 "4XPT_A" "4XPT_A" "1"  
+6 "4M48_A" "4M48_A" "1"  </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>ids <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"4XPB_A"</span>,<span class="st">"4XP4_A"</span>,<span class="st">"4M48_A"</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>anno <span class="ot">&lt;-</span> <span class="fu">pdb.annotate</span>(ids)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>anno</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       structureId chainId macromoleculeType chainLength experimentalTechnique
+4XPB_A        4XPB       A           Protein         543                 X-ray
+4XP4_A        4XP4       A           Protein         545                 X-ray
+4M48_A        4M48       A           Protein         543                 X-ray
+       resolution scopDomain                                           pfam
+4XPB_A      3.050       &lt;NA&gt; Sodium:neurotransmitter symporter family (SNF)
+4XP4_A      2.800       &lt;NA&gt; Sodium:neurotransmitter symporter family (SNF)
+4M48_A      2.955       &lt;NA&gt; Sodium:neurotransmitter symporter family (SNF)
+                            ligandId
+4XPB_A         NA (2),COC,CLR (2),CL
+4XP4_A Y01,P4G (2),CLR,COC,NA (2),CL
+4M48_A             NA (2),CL,21B,CLR
+                                                                                                            ligandName
+4XPB_A                                                             SODIUM ION (2),COCAINE,CHOLESTEROL (2),CHLORIDE ION
+4XP4_A CHOLESTEROL HEMISUCCINATE,1-ETHOXY-2-(2-ETHOXYETHOXY)ETHANE (2),CHOLESTEROL,COCAINE,SODIUM ION (2),CHLORIDE ION
+4M48_A                                                           SODIUM ION (2),CHLORIDE ION,Nortriptyline,CHOLESTEROL
+                        source
+4XPB_A Drosophila melanogaster
+4XP4_A Drosophila melanogaster
+4M48_A Drosophila melanogaster
+                                                                                                  structureTitle
+4XPB_A X-ray structure of Drosophila dopamine transporter with subsiteB mutations (D121G/S426M) bound to cocaine
+4XP4_A                                X-ray structure of Drosophila dopamine transporter in complex with cocaine
+4M48_A                               X-ray structure of dopamine transporter elucidates antidepressant mechanism
+                                 citation rObserved  rFree rWork spaceGroup
+4XPB_A   Wang, K.H., et al. Nature (2015)    0.2460 0.2690 0.244 P 21 21 21
+4XP4_A   Wang, K.H., et al. Nature (2015)        NA 0.2660 0.236 P 21 21 21
+4M48_A Penmatsa, A., et al. Nature (2013)    0.2226 0.2564 0.221 P 21 21 21</code></pre>
+</div>
+</div>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
